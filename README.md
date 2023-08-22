@@ -19,7 +19,9 @@ Our method can approximate the full-view solution, denoted as $\bm{s}^*_{(3)}$, 
  
  Detailed illustration of our geometric analysis 
  </div>
+ 
 ## Get Started
 
 > pip install -r requirements.txt
+> 
 > python main_GIGA.py
