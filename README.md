@@ -13,9 +13,11 @@ GIGA addresses the problem of incomplete multi-view clustering. It takes into ac
  illustration of our proposed GIGA 
  </div>
 
-
+ <div align=center><img src="pics/method.png" width="80%"> 
+ 
+ Detailed illustration of our geometric analysis 
+ </div>
 ## Get Started
 
 > pip install -r requirements.txt
-
 > python main_GIGA.py
