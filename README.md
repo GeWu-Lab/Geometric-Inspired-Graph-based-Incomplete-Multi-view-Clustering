@@ -15,7 +15,7 @@ GIGA addresses the problem of incomplete multi-view clustering. It takes into ac
 
 <!-- Our method can approach the full-view solution $\bm{s}^*_{(3)}$ using partila view, and obtain the optimal solution $\bm{s}^*_{(2)}$ which has the maximum cosine similarity with the full-view solution. -->
 
-Our method can approximate the full-view solution, denoted as **s**^*_{(3)}, using just available views. We obtain the optimal solution **s**^*_{(2)} on available views through projection, which has the highest cosine similarity to the full-view solution.
+Our method can approximate the full-view solution, denoted as **s**^\*_{(3)}, using just available views. We obtain the optimal solution **s**^\*_{(2)} on available views through projection, which has the highest cosine similarity to the full-view solution.
 
  <div align=center><img src="pics/method.png" width="80%"> 
  
