@@ -13,24 +13,41 @@ from CLR import CLR
 eps = 1e-7
 
 
-def calc_proj_matrix(W, alpha, N, idx_map, C):
-    V = alpha.shape[0]
-    A = np.zeros((N, N))
-    E = np.zeros((V, N, N))
+def calc_proj_matrix(W, alpha, idx_map, C):
+    '''
+    Obtaining the projection matrix 'proj_matrices' and the aggregation solution 'A'
+    Input: 
+        W : different views of affinity graph num_view * num_sample * num_sample;
+        alpha : View-specific weight;
+        idx_map : Record of the missing condition;
+        C : The relationship matrix among views.
+    Output"
+        proj_matrices : the set of projection matrix; 
+        A : aggregation solution derived by GIGA.
+    '''
+    num_view = alpha.shape[0]
+    num_sample = W[0].shape[0]
+    A = np.zeros((num_sample, num_sample))
+    E = np.zeros((num_view, num_sample, num_sample))
     proj_matrices = {}
     for hash in idx_map.keys():
-        mask = decode_hash(hash, V)
+        mask = decode_missing_condition(hash, num_view)
         matrix, beta = get_projection(C, mask, alpha=alpha)
         proj_matrices[hash] = matrix
         for x, y in idx_map[hash]:
-            for v in range(V):
+            for v in range(num_view):
                 A[x, y] += beta[v] * W[v, x, y]
     return proj_matrices, A
 
 def build_graph(data, mask, m = 9) :
+    '''
+    Graph construction. 
+    Input : data : data of each view; mask: the missing indicater V * n.
+    Output: W: Affinity graph. 
+    '''
     W = []
     num_sample = data[0].shape[0]
-    for v in range(V):
+    for v in range(num_view):
         mask_v = mask[v]
         available_data = data[v][mask_v]
         map_v = obtain_affinity_graph(available_data, m = m)
@@ -41,7 +58,7 @@ def build_graph(data, mask, m = 9) :
 
 def solve_quad(P, R = None):
     '''
-        Solve the quadratic problem. 
+        Solve quadratic problem. 
     '''
     V = P.shape[0]
     P = scipy.sparse.csr_matrix(P) 
@@ -88,6 +105,12 @@ def get_correlation(A, E):
     return C_nor
 
 def expension(alpha, mask):
+    '''
+    Fill the weight in missing view with 0.
+    Input alpha : Weights in available views;
+          mask : Missing indicator.
+    Output beta: Practical weights with 0 padded on missing view.
+    '''
     beta = np.zeros(alpha.shape)
     beta[np._id(mask)] = alpha
     return beta
@@ -96,9 +119,9 @@ def expension(alpha, mask):
 def get_projection(C, mask, alpha):
     '''
         First obtaining U^-1 V for each missing condition; then calculating reallocated weight \beta
-        C : Relationship among different views.
-        mask l-d: The detailed missing condition with bool. 1-> available; 0->missing
-        alpha l-d vector: Current view-specific weight 
+        C : Relationship among different views, num_view * num_view.
+        mask num_view: The detailed missing condition with bool. 1-> available; 0->missing
+        alpha num_view vector: Current view-specific weight 
     '''
     U = C[mask][:, mask].copy()
     V = C[mask].copy()
@@ -114,16 +137,22 @@ def get_projection(C, mask, alpha):
     weight = np.sum(beta)
     return matrix / weight, beta / weight
 
-def GIGA_function(W, label, mask, missing_rate):
-    mask = mask.astype(int)
+def GIGA_function(W,  mask):
+
+    '''
+    Main function for GIGA
+    Input: W: List of affinity of different views;
+           mask: missing indicator num_view * num_sample
+    Output: ans: Our prediction. 
+    '''
+
     num_view = len(W)
     num_clusters = label.max() - label.min() + 1
     num_sample = label.shape[0]
     alpha = np.ones(num_view) / num_view
     E = []
     for v in range(num_view):
-        E_v = np.tile(mask[v].reshape(-1, 1), (1, num_sample)) 
-        print(E_v.shape, mask[v].shape)
+        E_v = np.tile(mask[v].reshape(-1, 1).astype(int), (1, num_sample)) 
         E.append(E_v)
     E = np.array(E)
     W = np.array(W)
@@ -131,26 +160,23 @@ def GIGA_function(W, label, mask, missing_rate):
     idx_map = {}
     for i in range(num_sample):
         for j in range(num_sample):
-            hsh = get_hash(E[:, i, j])
+            hsh = encode_missing_condition(E[:, i, j])
             if hsh == 0:
                 continue
             if hsh not in idx_map.keys():
                 idx_map[hsh] = []
             idx_map[hsh].append((i, j))
-    clustering_result = []
     for iteration in range(8):
         alpha_last = alpha.copy()
-        proj_matrices, A = calc_proj_matrix(W, alpha, num_sample, idx_map, C)
+        proj_matrices, A = calc_proj_matrix(W, alpha, idx_map, C)
         S, _ = CLR(A, num_clusters, lambda_c = 1)
         alpha = update_alpha(S, W, idx_map, proj_matrices, num_sample / 20)     
         if np.sum(np.abs(alpha_last - alpha)) < eps:
             break
     _, ans = connected_components(S) 
-    print("Clustering_result:", missing_rate, evaluation.clustering_result(ans, label))    
+    return ans
 
-    return clustering_result
-
-def get_hash(vector):
+def encode_missing_condition(vector):
     N = vector.shape[0]
     hsh = 0
     for i in range(N):
@@ -158,12 +184,12 @@ def get_hash(vector):
         hsh += vector[i]
     return int(hsh)
 
-def decode_hash(a, N):
+def decode_missing_condition(a, view_id):
     a = int(a)
-    mask = np.zeros(N).astype(bool)
+    mask = np.zeros(view_id).astype(bool)
     while a > 0:
-        N -= 1
-        mask[N] = a % 2
+        view_id -= 1
+        mask[view_id] = a % 2
         a = a // 2
     return mask
 
@@ -175,10 +201,11 @@ set_seed(20)
 if __name__ == "__main__":
     Dataset = "MSRC_v1"
     data, label, k = get_data(dataset = Dataset)
-    N = label.shape[0]
-    V = len(data)
-    results = {}
-    for missing_rate in range(5):   
-        mask = get_mask(V, N, missing_rate=missing_rate / 10).astype(bool)
+    num_sample = label.shape[0]
+    num_view = len(data)
+    for missing_ratio in range(5):   
+        mask = get_mask(num_view, num_sample, missing_ratio=missing_ratio / 10).astype(bool)
         W = build_graph(data, mask, m = 14)
-        clustering_result = GIGA_function(W, label, mask, missing_rate)
+        ans = GIGA_function(W, mask)
+        result = evaluation.clustering_result(ans, label)
+        print("Clustering_result:", missing_ratio, result)    
