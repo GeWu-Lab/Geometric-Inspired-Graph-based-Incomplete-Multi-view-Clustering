@@ -16,6 +16,6 @@ GIGA addresses the problem of incomplete multi-view clustering. It takes into ac
 
 ## Get Started
 
-> pip install -r requirements.txt.
-> 
+> pip install -r requirements.txt
+
 > python main_GIGA.py
