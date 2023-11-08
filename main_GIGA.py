@@ -201,11 +201,12 @@ set_seed(20)
 if __name__ == "__main__":
     Dataset = "MSRC_v1"
     data, label, k = get_data(dataset = Dataset)
+    number_of_neibors = 14
     num_sample = label.shape[0]
     num_view = len(data)
     for missing_ratio in range(5):   
         mask = get_mask(num_view, num_sample, missing_ratio=missing_ratio / 10).astype(bool)
-        W = build_graph(data, mask, m = 14)
+        W = build_graph(data, mask, m = number_of_neibors)
         ans = GIGA_function(W, mask)
         result = evaluation.clustering_result(ans, label)
         print("Clustering_result:", missing_ratio, result)    

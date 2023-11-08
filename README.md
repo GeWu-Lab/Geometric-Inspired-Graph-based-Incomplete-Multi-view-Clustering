@@ -24,14 +24,23 @@ Our method can approximate the full-view solution, denoted as $s^*_{(3)}$, using
  </div>
 
 ## Get Started
+### Requirements 
 <pre><code>
-pip install -r requirements.txt 
+scikit-learn
+qpsolver
+munkres
+</code></pre>
+### Run
+You can simply run the demo on MSRC-v1 dataset using:  
+<pre><code>
 python main_GIGA.py
 </code></pre>
+You can adjust the algorithm's detailed setting by modifying parameters such as the number of nearest neighbors. Alternate datasets can also be utilized, provided they adhere to the following preparation protocol.
 
-## Data Preparation
+### Data Preparation
 
-The data should be located in the path ./data/, saved as .npy files. For each data containing $l$ views $X^1, X^2...,X^l$, the data should be arranged as the list $[X^1, X^2...,X^l]$, where $X^v \in \mathbb{R}^{d_v \times n}$, where $d_v$ is the dimension of the data in $v$-th view. Datasets can be found in [[link]](https://github.com/wangsiwei2010/awesome-multi-view-clustering#jump3).
+Datasets are positioned within the ./data/ directory and stored as .npy files. When a dataset includes $l$ views denoted as $X^1, X^2, \ldots, X^l$, it should be formatted as a list $[X^1, X^2, \ldots, X^l]$. Each $X^v$ should be a matrix in the real number space $\mathbb{R}^{d_v \times n}$, where $d_v$ represents the dimensionality of the data in the $v$-th view. Appropriate datasets can be sourced from the following repository: [[link]](https://github.com/wangsiwei2010/awesome-multi-view-clustering#jump3).
+
 
 ## Citation
 
