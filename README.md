@@ -1,9 +1,10 @@
 # Geometric-Inspired Graph-based Incomplete Multi-view Clustering
 <!-- A python implement for Geometric-Inspired Graph-based Incomplete Multi-view Clustering -->
 
-Here is the official PyTorch implementation of GIGA proposed in ''Geometric-Inspired Graph-based Incomplete Multi-view Clustering'', which is a flexible weight allocation strategy to solve the view missing problem in multi-view clustering.
+Here is the official python implementation of GIGA proposed in ''Geometric-Inspired Graph-based Incomplete Multi-view Clustering'', which is a flexible weight allocation strategy to solve the view missing problem in multi-view clustering.
 
-
+**Authors**: Zequn Yang, Han Zhang, Yake Wei, Feiping Nie and Di Hu.
+**Paper Resource**: [[Paper]](https://www.sciencedirect.com/science/article/abs/pii/S0031320323007793?dgcid=rss_sd_all)
 ## Apporach Overview
 GIGA addresses the problem of incomplete multi-view clustering. It takes into account the impact of missing views on the weight aggregation strategy which integrate knowledge from different views. Moreover, a geometric-inspired reallocation approach is introduced to mitigate this influence and attain a superior aggregation solution.
 
@@ -23,7 +24,30 @@ Our method can approximate the full-view solution, denoted as **s**^\*\_{(3)}, u
  </div>
 
 ## Get Started
+<pre><code>
+pip install -r requirements.txt 
+python main_GIGA.py
+</code></pre>
 
-> pip install -r requirements.txt
-> 
-> python main_GIGA.py
+## Data Preparation
+
+The data should be located in the path ./data/, saved as .npy files. 
+
+## Citation
+
+If you find this work useful, please consider citing it.
+
+<pre><code>
+@article{yang2023geometric,
+  title={Geometric-Inspired Graph-based Incomplete Multi-view Clustering},
+  author={Yang, Zequn and Zhang, Han and Wei, Yake and Wang, Zheng and Nie, Feiping and Hu, Di},
+  journal={Pattern Recognition},
+  pages={110082},
+  year={2023},
+  publisher={Elsevier}
+}
+</code></pre>
+
+## Acknowledgement
+
+This research was supported by Public Computing Cloud, Renmin University of China.
