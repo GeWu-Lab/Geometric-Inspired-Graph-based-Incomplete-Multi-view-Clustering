@@ -2,7 +2,7 @@
 <!-- A python implement for Geometric-Inspired Graph-based Incomplete Multi-view Clustering -->
 
 Here is the official python implementation of GIGA proposed in ''Geometric-Inspired Graph-based Incomplete Multi-view Clustering'', which is a flexible weight allocation strategy to solve the view missing problem in multi-view clustering.
-
+**Title**: Geometric-Inspired Graph-based Incomplete Multi-view Clustering
 **Authors**: Zequn Yang, Han Zhang, Yake Wei, Feiping Nie and Di Hu.
 **Paper Resource**: [[Paper]](https://www.sciencedirect.com/science/article/abs/pii/S0031320323007793?dgcid=rss_sd_all)
 ## Apporach Overview
@@ -16,7 +16,7 @@ GIGA addresses the problem of incomplete multi-view clustering. It takes into ac
 
 <!-- Our method can approach the full-view solution $\bm{s}^*_{(3)}$ using partila view, and obtain the optimal solution $\bm{s}^*_{(2)}$ which has the maximum cosine similarity with the full-view solution. -->
 
-Our method can approximate the full-view solution, denoted as **s**^\*\_{(3)}, using just available views. We obtain the optimal solution **s**^\*\_{(2)} on available views through projection, which has the highest cosine similarity to the full-view solution.
+Our method can approximate the full-view solution, denoted as $s^*_{(3)}$, using just available views. We obtain the optimal solution $s^*_{(2)}$ on available views through projection, which has the highest cosine similarity to the full-view solution.
 
  <div align=center><img src="pics/method.png" width="80%"> 
  
@@ -31,7 +31,7 @@ python main_GIGA.py
 
 ## Data Preparation
 
-The data should be located in the path ./data/, saved as .npy files. 
+The data should be located in the path ./data/, saved as .npy files. For each data containing $l$ views $X^1, X^2...,X^l$, the data should be arranged as the list $[X^1, X^2...,X^l]$, where $X^v \in \mathbb{R}^{d_v \times n}$, where $d_v$ is the dimension of the data in $v$-th view. Datasets can be found in [[link]](https://github.com/wangsiwei2010/awesome-multi-view-clustering#jump3).
 
 ## Citation
 
