@@ -6,7 +6,7 @@ Here is the official python implementation of GIGA proposed in ''Geometric-Inspi
 **Authors**: Zequn Yang, Han Zhang, Yake Wei, Feiping Nie and Di Hu.
 **Paper Resource**: [[Paper]](https://www.sciencedirect.com/science/article/abs/pii/S0031320323007793?dgcid=rss_sd_all)
 ## Apporach Overview
-GIGA addresses the problem of incomplete multi-view clustering. It takes into account the impact of missing views on the weight aggregation strategy which integrate knowledge from different views. Moreover, a geometric-inspired reallocation approach is introduced to mitigate this influence and attain a superior aggregation solution.
+GIGA addresses the problem of incomplete multi-view clustering. It takes into account the impact of missing views on the weight aggregation strategy which integrates knowledge from different views. Moreover, a geometric-inspired reallocation approach is introduced to mitigate this influence and attain a superior aggregation solution.
 
 
  <div align=center><img src="pics/intro.png" width="90%"> 
@@ -16,8 +16,7 @@ GIGA addresses the problem of incomplete multi-view clustering. It takes into ac
 
 <!-- Our method can approach the full-view solution $\bm{s}^*_{(3)}$ using partial view, and obtain the optimal solution $\bm{s}^*_{(2)}$ which has the maximum cosine similarity with the full-view solution. -->
 
-Using just available views, our method can approximate the full-view solution, denoted as $s^*_{(3)}$. 
-We obtain the optimal solution $s^*_{(2)}$ on available views through projection, which has the highest cosine similarity to the full-view solution.
+Using just available views, our method can approximate the full-view solution, denoted as $$s^*_{(3)}$$. We obtain the optimal solution $$s^*_{(2)}$$ on available views through projection, which has the highest cosine similarity to the full-view solution.
 
  <div align=center><img src="pics/method.png" width="80%"> 
  
